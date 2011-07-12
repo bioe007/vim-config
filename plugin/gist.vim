@@ -1,0 +1,1 @@
+/mnt/data/sandbox/vim/gist-vim/plugin/gist.vim
