@@ -21,10 +21,17 @@ set cindent
 set smarttab       " smartly handle the tab/space thing
 set completeopt=longest,menuone
 let mapleader = ","
+
+"activate pathogen
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+
 let NERDSpaceDelims=1
 let g:scratch_height = 16
 " don't keep diff and commit buffers around
 let VCSCommandDeleteOnHide = 1
+
+runtime macros/matchit.vim
 
 " set wcm=<TAB>
 "  OS dependent options
@@ -82,33 +89,6 @@ let Tlist_Inc_Winwidth = 0
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 let g:pydiction_menu_height = 10
 
-augroup mail
-    " settings for mutt
-    au!
-
-    function! MailStripSigDupes()
-        "remove signature block if its already in the mail
-        let signature_match = '-- \_.\+Perry Hargrave\_.\+\*\* End of'
-                    \. ' statement \*\*'
-        let quoted_signature_match = '> -- \_.\+\*\* End of statement \*\*'
-
-        " successive calls to search will move the cursor to where these
-        " match, then can just dG because the signature must have been
-        " appended to the mail
-        if search(quoted_signature_match) != 0
-            "move one line down so we don't find the quoted match again
-            norm! j
-            let sig_start = search(signature_match)
-            if sig_start != 0
-                " remove signature from sig_start to EOF
-                norm! dG
-            endif
-        endif
-    endfunction
-
-    au FileType mail call MailStripSigDupes()
-augroup END
-
 """ Appearance
 set nonumber       " dont show line numbers
 set vb t_vb=       " no flash
@@ -139,10 +119,6 @@ endfunction
 
 function! StatuslineTrailingSpaceWarning()
     "return '[\s]' if trailing white space is detected
-    if &filetype == 'mail'
-        return ''
-    endif
-
     if !exists("b:statusline_trailing_space_warning")
         let b:statusline_trailing_space_warning = search('\s\+$', 'nw')
 
@@ -473,7 +449,6 @@ nnoremap <Leader>, k:call
             \ .'\S', 'b')<CR>^
 nnoremap <Leader>. :call
             \ search('^'. matchstr(getline(line('.')), '\(\s*\)') .'\S')<CR>^
-
 
 " insert time
 map <Leader>D "=strftime("%Y-%m-%d")<CR>P"
