@@ -395,6 +395,10 @@ nnoremap <C-l> :nohlsearch<CR><C-l>
 map <Leader>x :ToggleScratch<CR>
 map <Leader>cc <plug>NERDCommenterToggle
 
+" Quickly focus on a single file, then be able to return
+nmap <Leader>% :tabedit %<CR>
+nmap <Leader>c :tabclose<CR>
+
 " if forget to `sudo vim` a file
 cmap w!! w !sudo tee % >/dev/null
 
