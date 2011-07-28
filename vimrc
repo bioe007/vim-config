@@ -142,7 +142,7 @@ function! StripTrailingSpace()
         exe '%s:\s\+$::'
         unlet! b:statusline_trailing_space_warning
         call StatuslineTrailingSpaceWarning()
-        norm! gZ
+        norm! 'Z
     endif
 endfunction
 
