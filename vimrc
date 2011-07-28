@@ -27,6 +27,7 @@ call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
 let NERDSpaceDelims=1
+let NERDCompactSexyComs=1
 let g:scratch_height = 16
 " don't keep diff and commit buffers around
 let VCSCommandDeleteOnHide = 1
@@ -132,6 +133,7 @@ function! StatuslineTrailingSpaceWarning()
 
     return b:statusline_trailing_space_warning
 endfunction
+
 
 function! StripTrailingSpace()
     "remove all trailing whitespace from buffer
