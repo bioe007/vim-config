@@ -354,7 +354,6 @@ augroup ftypes
     au FileType,bufwritepost,cursorhold c,cpp,python,lua,basic call
                                                 \ HighlightDefinedNames()
     au BufRead,BufNewFile *.lua.in set ft=lua
-    au FileType java set ft=javascript
     au FileType make set noet sw=8 ts=8 fdm=indent tw=80
     au FileType basic,lua,python,vim,zsh,sh,java
                 \ set formatoptions+=ro fdm=indent tw=80
