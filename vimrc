@@ -1,11 +1,6 @@
-" .vimrc
+" vimrc
+" perry hargrave
 "
-" Plugins I use:
-"               Align
-"               vcscommand
-"               taglist
-"               omnicomplete
-"               pythoncomplete
 "
 set nocompatible   " let vim be vim, not vi
 set history=550    " have 550 lines of command-line (etc) history:
@@ -59,6 +54,12 @@ let &runtimepath=my_vimdir . "," . &runtimepath
 let &backupdir=my_vimdir.'/var/backups//'
 let &directory=my_vimdir.'/var/swap//'
 let g:scratch_file = my_vimdir . '/var/scratch'
+
+" xolox/vim-notes
+let g:notes_directory="~/notes/"
+let g:notes_suffix=".txt"
+let g:notes_indexfile=my_vimdir.'/var/notes_indexfile'
+let g:notes_tagsindex=my_vimdir.'/var/notes_tagsindex'
 
 augroup skelLoad
     " skeleton files
