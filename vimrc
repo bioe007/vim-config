@@ -276,7 +276,7 @@ exe ":colorscheme" g:my_colors
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe
 set sessionoptions=blank,buffers,curdir,folds,help,winsize,tabpages
-set viminfo=/30,'1000,r/media,f0,h,\"100,%
+set viminfo=/30,'1000,r/media,r/.gvfs,f0,h,\"100,%
 
 if has('mouse')
     set mouse=a
