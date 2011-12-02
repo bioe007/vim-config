@@ -422,7 +422,7 @@ map <silent> <Leader>V :exe "source" g:my_vimrc<CR>
 
 " VCS commands
 map <silent> <Leader>d :VCSDiff<CR>
-map <silent> <Leader>ci :VCSCommit<CR>
+nnoremap <silent> <Leader>ci :VCSCommit<CR>
 
 function! MyGoToLongLine()
     " Helper function moves to the next long line in buffer
