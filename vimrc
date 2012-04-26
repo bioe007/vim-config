@@ -39,7 +39,7 @@ if has("unix")
 
     set shell=/bin/zsh
 
-    set tags=./tags,./TAGS,tags,TAGS,~/.vim/tags/avr,~/.vim/tags/lua
+    set tags=./tags,./TAGS,tags,TAGS,/usr/tags
     let my_ctags_cmd = '/usr/bin/ctags'
 else
     " windows
@@ -276,7 +276,7 @@ exe ":colorscheme" g:my_colors
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe
 set sessionoptions=blank,buffers,curdir,folds,help,winsize,tabpages
-set viminfo=/30,'1000,r/media,r/.gvfs,f0,h,\"100,%
+set viminfo=/30,'1000,r/media,r/.gvfs,r/.ssh,f0,h,\"100,%
 
 if has('mouse')
     set mouse=a
