@@ -33,7 +33,7 @@ runtime macros/matchit.vim
 "  OS dependent options
 if has("unix")
     " trailing backslash stores entire file path in backupdir
-    let g:my_vimrc = $HOME . "/.vimrc"
+    let g:my_vimrc = $HOME . "/.vim/vimrc"
     let g:my_vimdir = $HOME . "/.vim"
     let g:my_guifont = "Terminus\\ 12"
 
@@ -79,6 +79,7 @@ augroup skelLoad
     exe "au BufNewFile *.c,*.cpp,*.h 0r" my_vimdir."/templates/skeleton.c"
     exe "au BufNewFile  *.lua 0r" my_vimdir."/templates/skeleton.lua"
     exe "au BufNewFile  *.py 0r" my_vimdir."/templates/skeleton.py"
+    exe "au BufNewFile  *.html 0r" my_vimdir."/templates/skeleton.html"
     au BufNewFile *.[ch],*.lua,*.py call s:template_keywords()
 augroup END
 
@@ -367,9 +368,6 @@ augroup ftypes
     au BufRead,BufNewFile .git/TAG* set ft=gitcommit
     au FileType gitcommit call setpos('.', [0, 1, 1, 0])
     au FileType vcscommit,gitcommit,mail set tw=72 nofoldenable
-
-    au FileType mail :nmap <F8> :w<CR>:!aspell -e -c %<CR>:e<CR>
-    " au FileType python set omnifunc=pysmell#Complete
 
     let c_comment_strings    = 1 " strings inside C comments
     let perl_fold            = 1
