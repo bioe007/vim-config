@@ -24,8 +24,6 @@ call pathogen#helptags()
 let NERDSpaceDelims=1
 let NERDCompactSexyComs=1
 let g:scratch_height = 16
-" don't keep diff and commit buffers around
-let VCSCommandDeleteOnHide = 1
 
 runtime macros/matchit.vim
 
@@ -350,7 +348,7 @@ augroup ftypes
     " git TAG descriptions are recognized as 'conf' files.. :S
     au BufRead,BufNewFile .git/TAG* set ft=gitcommit
     au FileType gitcommit call setpos('.', [0, 1, 1, 0])
-    au FileType vcscommit,gitcommit,mail set tw=72 nofoldenable
+    au FileType gitcommit,mail set tw=72 nofoldenable
 
     let c_comment_strings    = 1 " strings inside C comments
     let perl_fold            = 1
@@ -400,10 +398,6 @@ map <Leader>v :exe "sp" g:my_vimrc<CR>
 map <silent> <Leader>V :exe "source" g:my_vimrc<CR>
             \:filetype detect<CR>
             \:exe ":echo 'vimrc reloaded'"<CR>
-
-" VCS commands
-map <silent> <Leader>d :VCSDiff<CR>
-nnoremap <silent> <Leader>ci :VCSCommit<CR>
 
 function! MyGoToLongLine()
     " Helper function moves to the next long line in buffer
