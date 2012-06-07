@@ -208,6 +208,10 @@ set statusline+=%#error#%{&ro?'':StatuslineTabWarning()}%*
 " show git branch
 set statusline+=%{fugitive#statusline()}
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
 " warning '\s' if trailing spaces found
 set statusline+=%#error#%{&ro?'':StatuslineTrailingSpaceWarning()}
 set statusline+=%*
