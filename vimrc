@@ -83,12 +83,6 @@ augroup skelLoad
     au BufNewFile *.[ch],*.lua,*.py call s:template_keywords()
 augroup END
 
-let Tlist_Ctags_Cmd           = my_ctags_cmd
-let Tlist_Auto_Update         = 1            " always auto-update taglist
-let Tlist_Exit_OnlyWindow     = 1            " close vim if only tlist is open
-let Tlist_Process_File_Always = 1            " always to taglist processing
-let Tlist_Inc_Winwidth = 0
-
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 let g:pydiction_menu_height = 10
 
@@ -108,18 +102,6 @@ set cursorline
 let &showbreak = '> '
 
 """ Status line
-function! Tname()
-    " either show the tag name or filetype
-    let tname = Tlist_Get_Tagname_By_Line()
-    if strlen(tname) > 0
-        return "[" . tname . "]"
-    elseif strlen(&ft)
-        return "[" . &ft . "]"
-    else
-        return ""
-    endif
-endfunction
-
 function! StatuslineTrailingSpaceWarning()
     "return '[\s]' if trailing white space is detected
     if !exists("b:statusline_trailing_space_warning")
@@ -135,7 +117,6 @@ function! StatuslineTrailingSpaceWarning()
 
     return b:statusline_trailing_space_warning
 endfunction
-
 
 function! StripTrailingSpace()
     "remove all trailing whitespace from buffer
@@ -216,15 +197,14 @@ let g:SL_LongLine_Verbose=1
 set statusline=
 set statusline+=%<%-.22f\     " filename
 
-" show tagname or filetype if tags don't exist
-set statusline+=%#TagListTagName#%{Tname()}%*
+set statusline+=%#TagListTagName#%{tagbar#currenttag('[%<%-.20s]','')}%*
 
-" warnings for various conditions
 " display a warning if fileformat isnt unix
 set statusline+=%#error#%{&ff!='unix'?'['.&ff.']':''}%*
 
 " display a warning if &et is wrong, or we have mixed-indenting
 set statusline+=%#error#%{&ro?'':StatuslineTabWarning()}%*
+
 " show git branch
 set statusline+=%{fugitive#statusline()}
 
@@ -250,7 +230,6 @@ if !exists("slau_loaded")
     let slau_loaded = 1
     augroup sbars
         au!
-        au bufwritepost * exe "TlistUpdate"
         au cursorholdi,cursorhold,bufwritepost * unlet!
                     \ b:statusline_trailing_space_warning
         au cursorhold,bufwritepost * unlet! b:statusline_tab_warning
@@ -445,7 +424,7 @@ nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 map <C-m> <C-W>+
 map <C-n> <C-W>-
-map <silent> <Leader>t :TlistToggle<CR>
+map <silent> <Leader>t :TagbarToggle<CR>
 map <F8> :exe "! " my_ctags_cmd
             \" -R --c++-kinds=+p --fields=+iaS --extra=+q "<CR>
 nnoremap <Leader>, k:call
