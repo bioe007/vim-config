@@ -360,7 +360,8 @@ augroup ftypes
                 \ set formatoptions+=ro fdm=indent tw=80
     au FileType c,cpp call MyCSettings()
 
-    au BufRead,BufNewFile *.txt set ft=text
+    au BufRead,BufNewFile *.txt set ft=text tw=72
+    au BufRead,BufNewFile *.md set ft=markdown sw=2 tw=72
     au FileType text set tw=0 linebreak wrap
 
     " git TAG descriptions are recognized as 'conf' files.. :S
