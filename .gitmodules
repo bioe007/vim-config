@@ -19,3 +19,9 @@
 [submodule "bundle/notes"]
 	path = bundle/notes
 	url = https://github.com/xolox/vim-notes.git
+[submodule "bundle/tagbar"]
+	path = bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "bundle/syntastic"]
+	path = bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git

@@ -24,8 +24,6 @@ call pathogen#helptags()
 let NERDSpaceDelims=1
 let NERDCompactSexyComs=1
 let g:scratch_height = 16
-" don't keep diff and commit buffers around
-let VCSCommandDeleteOnHide = 1
 
 runtime macros/matchit.vim
 
@@ -33,13 +31,13 @@ runtime macros/matchit.vim
 "  OS dependent options
 if has("unix")
     " trailing backslash stores entire file path in backupdir
-    let g:my_vimrc = $HOME . "/.vimrc"
+    let g:my_vimrc = $HOME . "/.vim/vimrc"
     let g:my_vimdir = $HOME . "/.vim"
     let g:my_guifont = "Terminus\\ 12"
 
     set shell=/bin/zsh
 
-    set tags=./tags,./TAGS,tags,TAGS,~/.vim/tags/avr,~/.vim/tags/lua
+    set tags=./tags,./TAGS,tags,TAGS,/usr/tags
     let my_ctags_cmd = '/usr/bin/ctags'
 else
     " windows
@@ -79,14 +77,9 @@ augroup skelLoad
     exe "au BufNewFile *.c,*.cpp,*.h 0r" my_vimdir."/templates/skeleton.c"
     exe "au BufNewFile  *.lua 0r" my_vimdir."/templates/skeleton.lua"
     exe "au BufNewFile  *.py 0r" my_vimdir."/templates/skeleton.py"
+    exe "au BufNewFile  *.html 0r" my_vimdir."/templates/skeleton.html"
     au BufNewFile *.[ch],*.lua,*.py call s:template_keywords()
 augroup END
-
-let Tlist_Ctags_Cmd           = my_ctags_cmd
-let Tlist_Auto_Update         = 1            " always auto-update taglist
-let Tlist_Exit_OnlyWindow     = 1            " close vim if only tlist is open
-let Tlist_Process_File_Always = 1            " always to taglist processing
-let Tlist_Inc_Winwidth = 0
 
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 let g:pydiction_menu_height = 10
@@ -107,18 +100,6 @@ set cursorline
 let &showbreak = '> '
 
 """ Status line
-function! Tname()
-    " either show the tag name or filetype
-    let tname = Tlist_Get_Tagname_By_Line()
-    if strlen(tname) > 0
-        return "[" . tname . "]"
-    elseif strlen(&ft)
-        return "[" . &ft . "]"
-    else
-        return ""
-    endif
-endfunction
-
 function! StatuslineTrailingSpaceWarning()
     "return '[\s]' if trailing white space is detected
     if !exists("b:statusline_trailing_space_warning")
@@ -134,7 +115,6 @@ function! StatuslineTrailingSpaceWarning()
 
     return b:statusline_trailing_space_warning
 endfunction
-
 
 function! StripTrailingSpace()
     "remove all trailing whitespace from buffer
@@ -215,17 +195,20 @@ let g:SL_LongLine_Verbose=1
 set statusline=
 set statusline+=%<%-.22f\     " filename
 
-" show tagname or filetype if tags don't exist
-set statusline+=%#TagListTagName#%{Tname()}%*
+set statusline+=%#TagListTagName#%{tagbar#currenttag('[%<%-.20s]','')}%*
 
-" warnings for various conditions
 " display a warning if fileformat isnt unix
 set statusline+=%#error#%{&ff!='unix'?'['.&ff.']':''}%*
 
 " display a warning if &et is wrong, or we have mixed-indenting
 set statusline+=%#error#%{&ro?'':StatuslineTabWarning()}%*
+
 " show git branch
 set statusline+=%{fugitive#statusline()}
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 " warning '\s' if trailing spaces found
 set statusline+=%#error#%{&ro?'':StatuslineTrailingSpaceWarning()}
@@ -249,7 +232,6 @@ if !exists("slau_loaded")
     let slau_loaded = 1
     augroup sbars
         au!
-        au bufwritepost * exe "TlistUpdate"
         au cursorholdi,cursorhold,bufwritepost * unlet!
                     \ b:statusline_trailing_space_warning
         au cursorhold,bufwritepost * unlet! b:statusline_tab_warning
@@ -276,7 +258,7 @@ exe ":colorscheme" g:my_colors
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe
 set sessionoptions=blank,buffers,curdir,folds,help,winsize,tabpages
-set viminfo=/30,'1000,r/media,f0,h,\"100,%
+set viminfo=/30,'1000,r/media,r/.gvfs,r/.ssh,f0,h,\"100,%
 
 if has('mouse')
     set mouse=a
@@ -367,10 +349,7 @@ augroup ftypes
     " git TAG descriptions are recognized as 'conf' files.. :S
     au BufRead,BufNewFile .git/TAG* set ft=gitcommit
     au FileType gitcommit call setpos('.', [0, 1, 1, 0])
-    au FileType vcscommit,gitcommit,mail set tw=72 nofoldenable
-
-    au FileType mail :nmap <F8> :w<CR>:!aspell -e -c %<CR>:e<CR>
-    " au FileType python set omnifunc=pysmell#Complete
+    au FileType gitcommit,mail set tw=72 nofoldenable
 
     let c_comment_strings    = 1 " strings inside C comments
     let perl_fold            = 1
@@ -421,10 +400,6 @@ map <silent> <Leader>V :exe "source" g:my_vimrc<CR>
             \:filetype detect<CR>
             \:exe ":echo 'vimrc reloaded'"<CR>
 
-" VCS commands
-map <silent> <Leader>d :VCSDiff<CR>
-map <silent> <Leader>ci :VCSCommit<CR>
-
 function! MyGoToLongLine()
     " Helper function moves to the next long line in buffer
     if exists("b:long_line")
@@ -448,7 +423,7 @@ nnoremap <C-k> <C-W>k
 nnoremap <C-j> <C-W>j
 map <C-m> <C-W>+
 map <C-n> <C-W>-
-map <silent> <Leader>t :TlistToggle<CR>
+map <silent> <Leader>t :TagbarToggle<CR>
 map <F8> :exe "! " my_ctags_cmd
             \" -R --c++-kinds=+p --fields=+iaS --extra=+q "<CR>
 nnoremap <Leader>, k:call
