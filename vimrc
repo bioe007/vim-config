@@ -18,7 +18,8 @@ set completeopt=longest,menuone
 let mapleader = ","
 
 "activate pathogen
-call pathogen#runtime_append_all_bundles()
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
 call pathogen#helptags()
 
 let NERDSpaceDelims=1
@@ -54,7 +55,7 @@ let &directory=my_vimdir.'/var/swap//'
 let g:scratch_file = my_vimdir . '/var/scratch'
 
 " xolox/vim-notes
-let g:notes_directory="~/notes/"
+let g:notes_directories=['~/Notes/']
 let g:notes_suffix=".txt"
 let g:notes_indexfile=my_vimdir.'/var/notes_indexfile'
 let g:notes_tagsindex=my_vimdir.'/var/notes_tagsindex'
