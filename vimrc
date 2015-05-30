@@ -378,6 +378,11 @@ nnoremap <C-l> :nohlsearch<CR><C-l>
 map <Leader>x :ToggleScratch<CR>
 map <Leader>cc <plug>NERDCommenterToggle
 
+"Title case
+vnoremap <F6> :s/\%V\<\(\w\)\(\w*\)\>/\u\1\L\2/ge
+nmap <F6> V<F6>
+imap <F6> <Esc><F6>i
+
 " Quickly focus on a single file, then be able to return
 nmap <Leader>% :tabedit %<CR>
 nmap <Leader>c :tabclose<CR>
