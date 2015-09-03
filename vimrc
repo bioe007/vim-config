@@ -2,6 +2,7 @@
 " perry hargrave
 "
 "
+set backspace=indent,eol,start
 set nocompatible   " let vim be vim, not vi
 set history=550    " have 550 lines of command-line (etc) history:
 set undolevels=200 " number of commands
@@ -16,11 +17,6 @@ set cindent
 set smarttab       " smartly handle the tab/space thing
 set completeopt=longest,menuone
 let mapleader = ","
-
-"activate pathogen
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-call pathogen#helptags()
 
 let NERDSpaceDelims=1
 let NERDCompactSexyComs=1
@@ -42,12 +38,21 @@ if has("unix")
     let my_ctags_cmd = '/usr/bin/ctags'
 else
     " windows
-    let g:my_vimrc = "X:/.vimrc"
+    let g:my_vimrc = $HOME . "/_vimrc"
     let g:my_vimdir = $HOME . "/_vim"
-    let g:my_guifont = "Dina:h10:cANSI"
+    let g:my_guifont = "Dina:h11:cANSI"
+
+
     let &tags="X:/sandbox/tags,./tags,./TAGS,tags,TAGS"
-    let my_ctags_cmd = $VIM . '/bin/ctags.exe'
+    let my_ctags_cmd = g:my_vimdir . '/bin/ctags.exe'
+    let g:tagbar_ctags_bin = my_ctags_cmd
 endif
+
+" activate pathogen
+" runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+call pathogen#helptags()
+
 
 let &runtimepath=my_vimdir . "," . &runtimepath
 let &backupdir=my_vimdir.'/var/backups//'
