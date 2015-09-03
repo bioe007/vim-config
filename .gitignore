@@ -1,5 +1,6 @@
 .VimballRecord
 .netrwhist
+bin/*
 var/
 tags/*
 tags
