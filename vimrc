@@ -17,15 +17,6 @@ set smarttab       " smartly handle the tab/space thing
 set completeopt=longest,menuone
 let mapleader = ","
 
-"activate pathogen
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
-let NERDSpaceDelims=1
-let NERDCompactSexyComs=1
-let g:scratch_height = 16
-
-runtime macros/matchit.vim
 
 " set wcm=<TAB>
 "  OS dependent options
@@ -41,11 +32,12 @@ if has("unix")
     let my_ctags_cmd = '/usr/bin/ctags'
 else
     " windows
-    let g:my_vimrc = "X:/.vimrc"
-    let g:my_vimdir = $HOME . "/_vim"
-    let g:my_guifont = "Dina:h10:cANSI"
-    let &tags="X:/sandbox/tags,./tags,./TAGS,tags,TAGS"
-    let my_ctags_cmd = $VIM . '/bin/ctags.exe'
+    let g:my_vimrc = $HOME . "/_vimrc"
+    let g:my_vimdir = $HOME . "/_vimfiles"
+    let g:my_guifont = "Inconsolata:h12:cANSI"
+    let &tags="./tags,./TAGS,tags,TAGS"
+    let my_ctags_cmd=$HOME . "/bin/ctags.exe"
+    set bs=2
 endif
 
 let &runtimepath=my_vimdir . "," . &runtimepath
@@ -53,11 +45,18 @@ let &backupdir=my_vimdir.'/var/backups//'
 let &directory=my_vimdir.'/var/swap//'
 let g:scratch_file = my_vimdir . '/var/scratch'
 
-" xolox/vim-notes
-let g:notes_directory="~/notes/"
-let g:notes_suffix=".txt"
-let g:notes_indexfile=my_vimdir.'/var/notes_indexfile'
-let g:notes_tagsindex=my_vimdir.'/var/notes_tagsindex'
+runtime bundle/pathogen/autoload/pathogen.vim
+
+"activate pathogen
+execute pathogen#infect()
+
+let NERDSpaceDelims=1
+let NERDCompactSexyComs=1
+let g:scratch_height = 16
+
+runtime macros/matchit.vim
+let g:tagbar_ctags_bin=my_ctags_cmd
+let g:tagbar_left = 1
 
 augroup skelLoad
     " skeleton files
@@ -81,7 +80,7 @@ augroup skelLoad
     au BufNewFile *.[ch],*.lua,*.py call s:template_keywords()
 augroup END
 
-let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
+let g:pydiction_location = $HOME . '/.vim/after/ftplugin/pydiction/complete-dict'
 let g:pydiction_menu_height = 10
 
 """ Appearance
@@ -258,7 +257,8 @@ exe ":colorscheme" g:my_colors
 set wildmode=list:longest,full
 set wildignore=*.o,*.obj,*.bak,*.exe
 set sessionoptions=blank,buffers,curdir,folds,help,winsize,tabpages
-set viminfo=/30,'1000,r/media,r/.gvfs,r/.ssh,f0,h,\"100,%
+" set viminfo=/30,'1000,r/media,r/.gvfs,r/.ssh,f0,h,\"100,%
+set viminfo=/30,'1000,r/media,r/.gvfs,r/.ssh,f0,h,\"100
 
 if has('mouse')
     set mouse=a
