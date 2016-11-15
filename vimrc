@@ -40,7 +40,7 @@ else
     " windows
     let g:my_vimrc = $HOME . "/_vimrc"
     let g:my_vimdir = $HOME . "/_vim"
-    let g:my_guifont = "Dina:h11:cANSI"
+    let g:my_guifont = "Lucida_Console:h11:cANSI"
 
 
     let &tags="X:/sandbox/tags,./tags,./TAGS,tags,TAGS"
@@ -89,6 +89,15 @@ augroup END
 
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 let g:pydiction_menu_height = 10
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {
+    \ "mode": "passive",
+    \ "active_filetypes": [],
+    \ "passive_filetypes": [] }
 
 """ Appearance
 set nonumber       " dont show line numbers
@@ -382,11 +391,6 @@ map <silent> <Leader>s :call StripTrailingSpace()<CR>
 nnoremap <C-l> :nohlsearch<CR><C-l>
 map <Leader>x :ToggleScratch<CR>
 map <Leader>cc <plug>NERDCommenterToggle
-
-"Title case
-vnoremap <F6> :s/\%V\<\(\w\)\(\w*\)\>/\u\1\L\2/ge
-nmap <F6> V<F6>
-imap <F6> <Esc><F6>i
 
 " Quickly focus on a single file, then be able to return
 nmap <Leader>% :tabedit %<CR>
