@@ -59,12 +59,6 @@ let &backupdir=my_vimdir.'/var/backups//'
 let &directory=my_vimdir.'/var/swap//'
 let g:scratch_file = my_vimdir . '/var/scratch'
 
-" xolox/vim-notes
-let g:notes_directories=['~/Notes/']
-let g:notes_suffix=".txt"
-let g:notes_indexfile=my_vimdir.'/var/notes_indexfile'
-let g:notes_tagsindex=my_vimdir.'/var/notes_tagsindex'
-
 augroup skelLoad
     " skeleton files
     au!
