@@ -1,7 +1,7 @@
-" vimrc
 " perry hargrave
 "
 "
+set autowrite
 set backspace=indent,eol,start
 set nocompatible   " let vim be vim, not vi
 set history=550    " have 550 lines of command-line (etc) history:
@@ -30,9 +30,9 @@ if has("unix")
     " trailing backslash stores entire file path in backupdir
     let g:my_vimrc = $HOME . "/.vim/vimrc"
     let g:my_vimdir = $HOME . "/.vim"
-    let g:my_guifont = "Terminus\\ 12"
+    let g:my_guifont = "Terminus\\ 14"
 
-    set shell=/bin/zsh
+    set shell=/bin/bash
 
     set tags=./tags,./TAGS,tags,TAGS,/usr/tags
     let my_ctags_cmd = '/usr/bin/ctags'
@@ -49,7 +49,6 @@ else
 endif
 
 " activate pathogen
-" runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 call pathogen#helptags()
 
@@ -92,6 +91,20 @@ let g:syntastic_mode_map = {
     \ "mode": "passive",
     \ "active_filetypes": [],
     \ "passive_filetypes": [] }
+
+" vim-go settings
+let g:go_fmt_command = "goimports"
+let g:go_addtags_transform = "camelcase"
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<c-z>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetsDir="/home/perry/.vim/bundle/vim-snippets/snippets"
 
 """ Appearance
 set nonumber       " dont show line numbers
@@ -282,8 +295,8 @@ function! HighlightDefinedNames()
     syn clear DefinedName
     " Run through the whole file
     for l in getline('1','$')
-    	" Look for #define
-    	if l =~ '^\s*#\s*define\s\+'
+        " Look for #define
+        if l =~ '^\s*#\s*define\s\+'
             let name = substitute(l,'^\s*#define\s\+\(\k\+\).*$', '\1', 'I')
             exe 'syn keyword DefinedName ' . name
         elseif l =~# "\<\w\+\.[A-Z_]\+[0-9A-Z_]\+\>"
@@ -294,7 +307,7 @@ function! HighlightDefinedNames()
             let name = substitute(l,
             \ '.*\(\<[A-Z]\+[0-9A-Z_]*\>\).*$', '\1', 'I')
             exe 'syn keyword DefinedName ' . name
-    	endif
+        endif
     endfor
     " syn match DefinedName "\<\w\+\.[A-Z_]\+[0-9A-Z_]\+\>"
     " syn match DefinedName "^\s*\<[A-Z_]\+[0-9A-Z_]\+\>\s*"
@@ -328,6 +341,26 @@ function! MyPythonSettings()
     iab ar* *args, **kwargs):
 endfunction
 
+
+" run :GoBuild or :GoTestCompile based on the go file
+function! s:build_go_files()
+    let l:file = expand('%')
+    if l:file =~# '^\f\+_test\.go$'
+        call go#test#Test(0, 1)
+    elseif l:file =~# '^\f\+\.go$'
+        call go#cmd#Build(0)
+    endif
+endfunction
+
+function! MyGoSettings()
+    " autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+    setlocal et fo+=ro fdm=indent tw=80 iskeyword+=35 nowrap
+    autocmd FileType go noremap <leader>t  :GoBuild<CR>
+    autocmd FileType go noremap <leader>m  :<C-u>call <SID>build_go_files()<CR>
+endfunction
+
+
+
 " load the types.vim highlighting file, if it exists
 function! LoadTypesHilights()
     let fname = expand('<afile>:p:h') . '/types.vim'
@@ -347,9 +380,12 @@ augroup ftypes
                                                 \ HighlightDefinedNames()
     au BufRead,BufNewFile *.lua.in set ft=lua
     au FileType make set noet sw=8 ts=8 fdm=indent tw=80
-    au FileType basic,lua,python,vim,zsh,sh,java
+    au FileType basic,lua,python,vim,zsh,sh,java,go
                 \ set formatoptions+=ro fdm=indent tw=80
     au FileType c,cpp call MyCSettings()
+    au FileType python call MyPythonSettings()
+    au FileType go call MyGoSettings()
+    au BufRead,BufNewFile *.go call MyGoSettings()
 
     au BufRead,BufNewFile *.txt set ft=text tw=72
     au BufRead,BufNewFile *.md set ft=markdown sw=2 tw=72
@@ -378,7 +414,6 @@ set incsearch  " show the `best match so far'
 set hlsearch   " set highlighted search on
 
 " bindings
-map <f12> :Lodgeit<CR>
 exe 'map <Leader>b :buffer '
 map <silent> <Leader>r :help qrcard<CR><C-W>L:vertical res 60<CR>
 map <silent> <Leader>s :call StripTrailingSpace()<CR>
@@ -400,8 +435,6 @@ inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
             \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
-"Load my TODO list and unfold it
-map <Leader>p :exe "tabe " . $HOME . '/TODO'<CR>zi
 
 ",v ,V edit/reload vimrc
 map <Leader>v :exe "sp" g:my_vimrc<CR>
