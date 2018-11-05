@@ -1,6 +1,7 @@
-.VimballRecord
 .netrwhist
+plugged/*
 bin/*
 var/
 tags/*
 tags
+view/*
