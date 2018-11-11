@@ -1,6 +1,5 @@
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-" Plug 'ajh17/VimCompletesMe'
 Plug 'valloric/youcompleteme'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
@@ -9,7 +8,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdcommenter'
-" Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
@@ -19,9 +17,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'adelarsq/vim-matchit'
-" ctrlp
-" Plug 'mdempsky/gocode' { 'rtp': 'vim',
-                        " 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -52,7 +47,7 @@ if has("unix")
     " trailing backslash stores entire file path in backupdir
     let g:my_vimrc = $HOME . "/.vim/vimrc"
     let g:my_vimdir = $HOME . "/.vim"
-    let g:my_guifont = "Terminus\\ 12"
+    let g:my_guifont = "Terminus\\ 10"
 else
     " windows
     let g:my_vimrc = $HOME . "/_vimrc"
@@ -107,6 +102,11 @@ set cursorline
 let &showbreak = '> '
 " trying to fix gofmt folding
 let g:go_fmt_experimental = 1
+let g:go_fmt_command = "goimports"
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
 
 " KEYS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -114,6 +114,9 @@ map <silent> <Leader>s :call StripTrailingSpace()<CR>
 map <silent> <Leader>t :TagbarToggle<CR>
 nnoremap <C-l> :nohlsearch<CR><C-l>
 exe 'map <Leader>b :buffer '
+
+" Fixes conflict with YCM and UltiSnips
+let g:UltiSnipsExpandTrigger="<c-j>"
 
 ",v ,V edit/reload vimrc
 map <Leader>v :exe "sp" g:my_vimrc<CR>
