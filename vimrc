@@ -1,11 +1,14 @@
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-Plug 'valloric/youcompleteme'
+if has("unix")
+    " NOTE: YCM is a PITA on windows...
+    Plug 'valloric/youcompleteme'
+    Plug 'SirVer/ultisnips'
+endif
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
@@ -27,6 +30,7 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 call plug#end()
 
 set backspace=indent,eol,start
+set encoding=utf-8
 set nocompatible   " let vim be vim, not vi
 set history=550    " have 550 lines of command-line (etc) history:
 set undolevels=200 " number of commands
@@ -47,12 +51,12 @@ if has("unix")
     " trailing backslash stores entire file path in backupdir
     let g:my_vimrc = $HOME . "/.vim/vimrc"
     let g:my_vimdir = $HOME . "/.vim"
-    let g:my_guifont = "Terminus\\ 10"
+    let g:my_guifont = "Hack\\ 11"
 else
     " windows
-    let g:my_vimrc = $HOME . "/_vimrc"
-    let g:my_vimdir = $HOME . "/_vim"
-    let g:my_guifont = "Lucida_Console:h11:cANSI"
+    let g:my_vimdir = $HOME . "/vimfiles"
+    let g:my_vimrc = $HOME . "/vimfiles/vimrc"
+    let g:my_guifont = "Hack:h11:cANSI"
 endif
 
 if has("gui_running")
