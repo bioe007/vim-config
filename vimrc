@@ -44,6 +44,7 @@ set autoindent     " copy indent from prev line or syn
 set cindent
 set smarttab       " smartly handle the tab/space thing
 set completeopt=longest,menuone
+set autowrite      " auto-save when calling :make
 let mapleader = ","
 let NERDSpaceDelims=1  " spaces after comment char
 
@@ -114,8 +115,12 @@ let g:go_highlight_function_calls = 1
 
 " KEYS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <Leader>n :cnext<CR>
+map <Leader>p :cnext<CR>
+nnoremap <leader>a :cclose<CR>
+map <silent> <Leader>c <plug>NERDCommenterToggle
 map <silent> <Leader>s :call StripTrailingSpace()<CR>
-map <silent> <Leader>t :TagbarToggle<CR>
+map <silent> <Leader>e :TagbarToggle<CR>
 nnoremap <C-l> :nohlsearch<CR><C-l>
 exe 'map <Leader>b :buffer '
 
@@ -185,6 +190,7 @@ endfunction
 
 function! MyGoSettings()
     " autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+    map <Leader>t :GoTest<CR>
     setlocal et fo+=ro fdm=syntax tw=79 iskeyword+=35 nowrap noet ts=4 sw=4
     autocmd FileType go noremap <leader>m  :<C-u>call <SID>build_go_files()<CR>
     autocmd FileType go noremap <leader>r  :GoRun<CR>
@@ -228,7 +234,7 @@ augroup END
 
 " Status line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='solarized'
+let g:airline_theme='desertink'
 let g:airline#extensions#tabline#enabled = 1
 
 
