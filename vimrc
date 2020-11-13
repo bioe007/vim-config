@@ -1,3 +1,5 @@
+if has('python3')
+endif
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 if has("unix")
@@ -20,12 +22,20 @@ Plug 'pangloss/vim-javascript'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'adelarsq/vim-matchit'
+Plug 'jmcantrell/vim-virtualenv'
+
+"python folding help
+Plug 'tmhedberg/SimpylFold'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 " Using a non-master branch
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+Plug 'google/yapf'
+
+Plug 'dracula/vim', {'as':'dracula'}
 
 call plug#end()
 
@@ -45,6 +55,8 @@ set cindent
 set smarttab       " smartly handle the tab/space thing
 set completeopt=longest,menuone
 set autowrite      " auto-save when calling :make
+set number
+
 let mapleader = ","
 let NERDSpaceDelims=1  " spaces after comment char
 
@@ -65,12 +77,22 @@ if has("gui_running")
     set guioptions=
     set guioptions+=c
     exe "set guifont=" . g:my_guifont
-    let g:my_colors = 'zenburn'
+    let g:my_colors = 'dracula'
 elseif &t_Co == 256
-    let g:my_colors = 'zenburn'
+    let g:my_colors = 'dracula'
 else
     let g:my_colors = 'desert'
 endif
+
+augroup dracula_customize
+    au!
+    let g:dracula_bold = 1
+    let g:dracula_underline = 1
+    let g:dracula_undercurl = 1
+    let g:dracula_colorterm = 0
+    let g:dracula_italic = 1
+    autocmd ColorScheme dracula hi CursorLine cterm=underline term=underline
+augroup END
 
 exe ":colorscheme" g:my_colors
 
@@ -123,6 +145,7 @@ map <silent> <Leader>s :call StripTrailingSpace()<CR>
 map <silent> <Leader>e :TagbarToggle<CR>
 nnoremap <C-l> :nohlsearch<CR><C-l>
 exe 'map <Leader>b :buffer '
+nnoremap <space> za
 
 " Fixes conflict with YCM and UltiSnips
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -166,16 +189,12 @@ map <silent> <Leader>l :call MyGoToLongLine()<CR>
 function! MyCSettings()
     set fo+=ro fdm=syntax tw=80 iskeyword+=35 nowrap
     " syn match matchName /\(#define\)\@<= .*\(\\$\)\=\_.*/
-    call ReIAB("#include")
-    call ReIAB("#define")
     " call LoadTypesHilights()
 endfunction
 
 function! MyPythonSettings()
-    set fo+=ro fdm=indent tw=80 iskeyword+=35 nowrap
-    " call HiPyDocStrings()
-    iab __i def __init__(self, *args, **kwargs):
-    iab ar* *args, **kwargs):
+    set fo+=ro fdm=indent tw=79 iskeyword+=35 nowrap
+    let g:SimpylFold_docstring_preview=1
 endfunction
 
 " run :GoBuild or :GoTestCompile based on the go file
@@ -211,7 +230,10 @@ augroup ftypes
     au FileType python call MyPythonSettings()
     au FileType go call MyGoSettings()
     au BufRead,BufNewFile *.go call MyGoSettings()
-
+    au BufRead,BufNewFile *.js, *.html, *.css
+        \ set tabstop=2
+        \ set softtabstop=2
+        \ set shiftwidth=2
     au BufRead,BufNewFile *.txt set ft=text tw=72
     au BufRead,BufNewFile *.md set ft=markdown sw=2 tw=72
     au FileType text set tw=0 linebreak wrap
@@ -234,7 +256,7 @@ augroup END
 
 " Status line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='desertink'
+let g:airline_theme='dracula'
 let g:airline#extensions#tabline#enabled = 1
 
 
@@ -306,3 +328,10 @@ let g:tagbar_type_go = {
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
 \ }
+
+
+let g:ale_linters = {
+    \   'python': ['pylint', 'flake8', 'jedi'],
+    \   'javascript': ['eslint'],
+    \}
+
